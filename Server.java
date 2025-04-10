@@ -25,9 +25,9 @@ public class Server extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true); // It is necessary to show the frame here!
 
-        try {
+        try (ServerSocket serverSocket = new ServerSocket(8000)) {
             // Create a server socket
-            ServerSocket serverSocket = new ServerSocket(8000);
+            //ServerSocket serverSocket = new ServerSocket(8000);
             jta.append("Server started at " + new Date() + '\n');
 
             // Listen for a connection request

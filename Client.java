@@ -37,7 +37,7 @@ public class Client extends JFrame {
         add(p, BorderLayout.NORTH);
         add(new JScrollPane(jta), BorderLayout.CENTER);
 
-        jtfName.addActionListener(new ButtonListener()); // Register listener
+        jb.addActionListener(new ButtonListener()); // Register listener
         jtfPhoneNumber.addActionListener(new ButtonListener()); // Register listener
 
         setTitle("Client");
