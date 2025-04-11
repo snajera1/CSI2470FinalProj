@@ -37,31 +37,21 @@ public class Client extends JFrame {
         add(p, BorderLayout.NORTH);
         add(new JScrollPane(jta), BorderLayout.CENTER);
 
-        jtfName.addActionListener(new ButtonListener()); // Register listener
-        jtfPhoneNumber.addActionListener(new ButtonListener()); // Register listener
+        jb.addActionListener(new ButtonListener()); // Register listener
 
         setTitle("Client");
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true); // It is necessary to show the frame here!
 
-        try {
-            // Create a socket to connect to the server
-            Socket socket = new Socket("localhost", 8000);
-
-            // Create an input stream to receive data from the server
-            fromServer = new DataInputStream(socket.getInputStream());
-
-            // Create an output stream to send data to the server
-            toServer = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException ex) {
-            jta.append(ex.toString() + '\n');
-        }
     }
 
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            try {
+            try (Socket socket = new Socket("localhost", 8000);
+                 DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
+                 DataInputStream fromServer = new DataInputStream(socket.getInputStream())) {
+
                 // Get the name and phone number from the text fields
                 String name = jtfName.getText().trim();
                 String phoneNumber = jtfPhoneNumber.getText().trim();
@@ -70,16 +60,18 @@ public class Client extends JFrame {
                 toServer.writeUTF(name);
                 toServer.writeUTF(phoneNumber);
                 toServer.flush();
-
                 // Get the server response
                 String serverResponse = fromServer.readUTF();
 
                 // Display to the text area
                 jta.append("Sent contact: " + name + " - " + phoneNumber + "\n");
                 jta.append("Server response: " + serverResponse + "\n");
+                
+                socket.close();
             } catch (IOException ex) {
                 jta.append(ex.toString() + '\n');
             }
         }
     }
+
 }
