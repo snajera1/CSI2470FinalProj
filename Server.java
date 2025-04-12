@@ -4,13 +4,18 @@ import java.util.*;
 import java.util.concurrent.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.File;
 
 public class Server extends JFrame {
     // Text area for displaying contents
     private JTextArea jta = new JTextArea();
 
-    // Thread-safe map to store name and phone number pairs
+    // HashMap to store name and phone number pairs
     private ConcurrentHashMap<String, String> contacts = new ConcurrentHashMap<>();
+
+    // Text file to store the contact info
+    public static final File contactBook = new File("contactbook.txt");
 
     public static void main(String[] args) {
         new Server();
@@ -72,6 +77,17 @@ public class Server extends JFrame {
                     // Display the contact in the JTextArea
                     jta.append("Received contact: " + name + " - " + phoneNumber + '\n');
                     jta.append("Current Contacts: " + contacts + '\n');
+
+                    // Writes the contact to a text file
+                    try {
+                        FileWriter writer = new FileWriter("contactBook.txt", true);
+                        writer.write(name + " - " + phoneNumber + "\n");
+                        writer.close();
+                        outputToClient.writeUTF("Successfully written to file.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             } catch (IOException ex) {
                 jta.append("Client disconnected: " + socket.getInetAddress() + '\n');

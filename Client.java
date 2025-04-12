@@ -38,10 +38,7 @@ public class Client extends JFrame {
         add(new JScrollPane(jta), BorderLayout.CENTER);
 
         jb.addActionListener(new ButtonListener()); // Register listener
-<<<<<<< HEAD
         jtfPhoneNumber.addActionListener(new ButtonListener()); // Register listener
-=======
->>>>>>> parent of 98b5c9c (Revert "fixed multiple clients crashing")
 
         setTitle("Client");
         setSize(500, 300);
